@@ -11,14 +11,15 @@ namespace TankGame.Bullet
         public BulletController(BulletModel bulletModel, BulletView bulletView, Transform spawner, float damageValue)
         {
             BulletModel = bulletModel;
-            Vector3 newPos = spawner.transform.position;
-
+            Spawner = spawner;
+            DamageValue = damageValue;
             BulletView = GameObject.Instantiate(bulletView, spawner.transform.position, spawner.transform.rotation);
-            Rigidbody rb = BulletView.GetComponent<Rigidbody>();
-            rb.velocity = spawner.transform.forward * BulletModel.Speed;
+            //Rigidbody rb = BulletView.GetComponent<Rigidbody>();
+            //rb.velocity = spawner.transform.forward * BulletModel.Speed;
             BulletView.InitializeController(this);
 
-            BulletView.SetBulletDetails(damageValue);
+            BulletView.SetBulletDetails(DamageValue);
+            //BulletService.Instance.SetBulletCounter();
         }
 
         public void DestroyBulletView()
@@ -37,6 +38,14 @@ namespace TankGame.Bullet
                 BulletView.Destroy();
             }
         }
+        public void Disable()
+        {
+            BulletView.Disable();
+        }
+        public void Enable(Transform spawner, float damage)
+        {
+            BulletView.Enable(spawner, damage);
+        }
 
         //public void ApplyEnemyDamage(float damage, EnemyView enemyTank)
         //{
@@ -49,6 +58,8 @@ namespace TankGame.Bullet
         //}
 
         public BulletModel BulletModel { get; set; }
+        public Transform Spawner { get; }
+        public float DamageValue { get; }
         public BulletView BulletView { get; }
     }
 }
