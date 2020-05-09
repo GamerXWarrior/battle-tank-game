@@ -9,6 +9,7 @@ namespace TankGame.Event
     public class EventService : MonoSingletonGeneric<EventService>
     {
         public event Action PlayerSpawn;
+        public event Action GameOver;
         public event Action<int> EnemyDeath;
         public event Action<int> EnemyKillAchievment;
         public event Action<int> BulletAchievment;
@@ -49,6 +50,9 @@ namespace TankGame.Event
             EnemyKillAchievment?.Invoke(deathCount);
         }
        
-
+        public void OnGameOver()
+        {
+            GameOver?.Invoke();
+        }
     }
 }

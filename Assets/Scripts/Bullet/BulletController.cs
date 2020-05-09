@@ -19,7 +19,7 @@ namespace TankGame.Bullet
             BulletView.InitializeController(this);
 
             BulletView.SetBulletDetails(DamageValue);
-            BulletService.Instance.SetBulletCounter();
+            //BulletService.Instance.SetBulletCounter();
         }
 
         public void DestroyBulletView()

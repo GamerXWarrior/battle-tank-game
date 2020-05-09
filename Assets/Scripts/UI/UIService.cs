@@ -17,6 +17,8 @@ namespace TankGame.UI
         public Text bulletFired;
         public Text enemyKillAchievmentText;
         public Text bulletAchievmentText;
+        public GameObject gameOverUI;
+        public Button[] gameOverButtons;
 
         private int FiredBullets;
         private int KilledEnemies;
@@ -32,6 +34,7 @@ namespace TankGame.UI
             //EventService.Instance.EnemyDeath += ShowEnemyKilledUI;
             EventService.Instance.EnemyKillAchievment += ShowAchievmentUnlock;
             EventService.Instance.BulletAchievment += ShowBulletAchievmentUnlock;
+            EventService.Instance.GameOver += ShowGameOverUI;
             //EventService.Instance.BulletFired += ShowBulletFiredUI;
             //for (int i = 0; i < buttons.Length; i++)
             //{
@@ -55,7 +58,7 @@ namespace TankGame.UI
         async void ShowBulletAchievmentUnlock(int bulletCount)
         {
             bulletAchievmentText.gameObject.SetActive(true);
-            bulletAchievmentText.text =  bulletCount + "bullets fired, New Achievment Unlocked.";
+            bulletAchievmentText.text = bulletCount + "bullets fired, New Achievment Unlocked.";
             await new WaitForSeconds(2f);
             bulletAchievmentText.gameObject.SetActive(false);
         }
@@ -68,7 +71,7 @@ namespace TankGame.UI
 
         public void ShowEnemyKilledUI()
         {
-            KilledEnemies = PlayerPrefs.GetInt("KilledEnemies",0);
+            KilledEnemies = PlayerPrefs.GetInt("KilledEnemies", 0);
             playerKills.text = "Kills: " + KilledEnemies;
         }
 
@@ -88,6 +91,28 @@ namespace TankGame.UI
             await new WaitForSeconds(1.0f);
             introTexts[1].gameObject.SetActive(false);
             SetInGameUI();
+        }
+
+        private void ShowGameOverUI()
+        {
+            gameOverUI.SetActive(true);
+            for (int i = 0; i < gameOverButtons.Length; i++)
+            {
+                int buttonIndex = i; //(important) for closure error, first capture the data
+                gameOverButtons[buttonIndex].onClick.AddListener(() => onButtonClick(buttonIndex));
+            }
+        }
+
+        private void onButtonClick(int index)
+        {
+            if(index == 0)
+            {
+                SceneManager.LoadScene(index);
+            }
+            if(index == 1)
+            {
+                SceneManager.LoadScene(index);
+            }
         }
 
         private void generateTank(int tankSerialNumber)

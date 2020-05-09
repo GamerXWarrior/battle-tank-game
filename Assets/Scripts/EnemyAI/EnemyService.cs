@@ -63,6 +63,7 @@ namespace TankGame.Enemy
                 yield return new WaitForSeconds(1f);
                 enemyTank.Destroy();
             }
+            EventService.Instance.OnGameOver();
         }
 
         public void DestroyTank(EnemyController controller)
@@ -71,11 +72,7 @@ namespace TankGame.Enemy
             {
                 if (controller == enemyTanks[i])
                 {
-                    //SpawnerPos = controller.SpawnerPos;
-                    //SpawnerRotation = controller.SpawnerRotation;
-                    //EnemyNumber = controller.EnemyNumber;
                     SetEnemyCounter();
-                    //controller.Destroy();
                     controller.Disable();
 
                     enemyPoolService.ReturnItem(controller);
@@ -103,21 +100,5 @@ namespace TankGame.Enemy
 
         }
 
-
-
-
-        //public void TakeDamage(EnemyView enemy, float damage)
-        //{
-        //    for (int i = 0; i < EnemyList.enemyScriptableObject.Length; i++)
-        //    {
-        //        if(enemy.GetController().EnemyModel.EnemyTankType == EnemyList.enemyScriptableObject[i].EnemyType)
-        //        {
-        //            EnemyList.enemyScriptableObject[i].TankHealth -= damage;
-        //            Debug.Log("enemy health= " + EnemyList.enemyScriptableObject[i].TankHealth);
-        //            EnemyModel model = new EnemyModel(EnemyList.enemyScriptableObject[i]);
-        //            enemy.SetViewDetails(model, EnemyList.enemyScriptableObject[i]);
-        //        }
-        //    }
-        //}
     }
 }

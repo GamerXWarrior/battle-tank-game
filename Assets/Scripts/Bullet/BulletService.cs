@@ -33,6 +33,7 @@ namespace TankGame.Bullet
             BulletController controller = bulletPoolService.GetBullet(bulletModel, bulletView, bulletSpawner, bulletDamage);
             controller.Enable(bulletSpawner, bulletDamage);
             bullets.Add(controller);
+            SetBulletCounter();
             return controller;
         }
 
