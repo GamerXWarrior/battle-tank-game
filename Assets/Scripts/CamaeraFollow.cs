@@ -8,12 +8,15 @@ public class CamaeraFollow : MonoBehaviour
 {
     private TankView player;
     private Vector3 posDifference;
-
-
+    private Vector3 initPos;
+    private Quaternion initRot;
 
     void Start()
     {
+        initPos = transform.position;
+        initRot = transform.rotation;
         EventService.Instance.PlayerSpawn += OnPlayerSpawned;
+        EventService.Instance.PlayerDeath += OnPLayerDied;
     }
 
     private void OnPlayerSpawned()
@@ -25,14 +28,17 @@ public class CamaeraFollow : MonoBehaviour
             transform.parent = player.transform;
             transform.position = player.transform.position + new Vector3(0, 3.18f, -3.04f) ;
             transform.eulerAngles = new Vector3(22.03f, 1.81f, 0);
-            //transform.rotation = player.transform.rotation;
-            //transform.position = player.transform.position;
-            //posDifference = player.transform.position - transform.position;
         }
         else
         {
             Debug.Log("player is null");
         }
+    }
+
+    private void OnPLayerDied(int playerNUmber)
+    {
+        transform.parent = null;
+        transform.SetPositionAndRotation(initPos, initRot);
     }
 
     private void Update()

@@ -38,8 +38,8 @@ namespace TankGame.Tank
             {
                 if(controller == tanks[i])
                 {
-                    controller.Destroy();
                     SetPlayerDeathCounter(controller);
+                    controller.Destroy();
                 }
             }
             StartCoroutine(DestroySsceneObjects());

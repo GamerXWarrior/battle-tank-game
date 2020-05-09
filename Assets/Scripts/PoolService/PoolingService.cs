@@ -11,7 +11,6 @@ public class PoolingService<T> : MonoSingletonGeneric<PoolingService<T>>
     private List<PooledItem<T>> pooledItems = new List<PooledItem<T>>();
     public virtual T GetItem()
     {
-        Debug.Log("get item");
         if (pooledItems.Count > 0)
         {
             PooledItem<T> item = pooledItems.Find(i => i.IsUsed == false);

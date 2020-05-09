@@ -13,7 +13,7 @@ namespace TankGame.Enemy
         public EnemyScriptableObjectList EnemyList;
         public List<EnemyController> enemyTanks = new List<EnemyController>();
         private Coroutine coroutine;
-        private int enemyDeathCounter=0;
+        private int enemyDeathCounter = 0;
         private Vector3 SpawnerPos;
         private Quaternion SpawnerRotation;
         private int EnemyNumber;
@@ -37,7 +37,7 @@ namespace TankGame.Enemy
         {
             this.SpawnerPos = enemySpawnerPos;
             this.SpawnerRotation = enemySpawnerRotation;
-            this.EnemyNumber =  enemyIndex;
+            this.EnemyNumber = enemyIndex;
 
             EnemyModel model = new EnemyModel(EnemyList.enemyScriptableObject[enemyIndex]);
             EnemyController controller = enemyPoolService.GetEnemy(model, enemyView, enemySpawnerPos, enemySpawnerRotation, enemyIndex);
@@ -77,7 +77,7 @@ namespace TankGame.Enemy
                     SetEnemyCounter();
                     //controller.Destroy();
                     controller.Disable();
-                    
+
                     enemyPoolService.ReturnItem(controller);
                     enemyTanks[i] = null;
                 }
@@ -90,7 +90,7 @@ namespace TankGame.Enemy
             enemyDeathCounter++;
             EventService.Instance.OnEnemyDeath(enemyDeathCounter);
             SpawnEnemyAgain(SpawnerPos, SpawnerRotation, EnemyNumber);
-            if (enemyDeathCounter%5 == 0)
+            if (enemyDeathCounter % 5 == 0)
             {
                 EventService.Instance.OnEnemyKillAchievment(enemyDeathCounter);
             }

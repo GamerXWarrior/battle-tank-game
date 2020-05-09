@@ -139,6 +139,7 @@ namespace TankGame.Tank
             if (Input.GetButtonDown("Fire1"))
             {
                 controller.fire(bulletSpawner, bulletDamage);
+
             }
         }
 
