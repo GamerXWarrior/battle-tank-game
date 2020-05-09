@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TankGame.Bullet;
 using TankGame.Enemy;
+using TankGame.Event;
 using TankGame.Spawner;
 using System;
 
@@ -10,12 +11,12 @@ namespace TankGame.Tank
 {
     public class TankService : MonoSingletonGeneric<TankService>
     {
-        public event Action PlayerSpawn;
         public TankView tankView;
         public TankScriptableObjectList tankList;
         public List<TankController> tanks = new List<TankController>();
         TankController controller;
-
+        private int playerDeathCounter=0;
+        
 
         protected override void Awake()
         {
@@ -24,14 +25,6 @@ namespace TankGame.Tank
         protected override void Start()
         {
             base.Start();
-            EnemyService.Instance.OnDeath += CheckEnemyDeath;
-        }
-
-
-
-        private void CheckEnemyDeath()
-        {
-            Debug.Log("Enemy Died");
         }
 
         public void fire(Transform bulletSpawn, float bulletDamange)
@@ -45,12 +38,20 @@ namespace TankGame.Tank
             {
                 if(controller == tanks[i])
                 {
+                    SetPlayerDeathCounter(controller);
                     controller.Destroy();
                 }
             }
             StartCoroutine(DestroySsceneObjects());
         }
       
+        private void SetPlayerDeathCounter(TankController controller)
+        {
+            playerDeathCounter++;
+            EventService.Instance.OnPlayerDeath(playerDeathCounter);
+
+        }
+
         public TankView GetCurrentPlayer()
         {
             return tanks[0].GetTankView();
@@ -71,7 +72,6 @@ namespace TankGame.Tank
         {
             TankModel model = new TankModel(tankList.tankScriptableObject[0]);
             TankController tank = new TankController(model, tankView, spawner);
-            PlayerSpawn?.Invoke();
             tanks.Add(tank);
             //return tank;
         }

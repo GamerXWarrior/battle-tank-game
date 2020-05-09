@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TankGame.Event;
 
 namespace TankGame.Tank
 {
@@ -24,6 +25,14 @@ namespace TankGame.Tank
         private TankController controller;
         public Slider slider;
         private TankModel model;
+        private PlayerSfx currentSfx;
+
+
+        private void Start()
+        {
+            EventService.Instance.OnPlayerSpawn();
+            currentSfx = PlayerSfx.Idle;
+        }
 
         public void InitialiseController(TankController tankController)
         {
@@ -105,6 +114,23 @@ namespace TankGame.Tank
         {
             horizontalInput = Input.GetAxisRaw("Horizontal1");
             verticalInput = Input.GetAxisRaw("Vertical1");
+            if (verticalInput != 0)
+            {
+                if (currentSfx != PlayerSfx.Walk)
+                {
+                    controller.PlaySound(PlayerSfx.Walk, true);
+                    currentSfx = PlayerSfx.Walk;
+                }
+            }
+            else
+            {
+                if (currentSfx != PlayerSfx.Idle)
+                {
+                    controller.PlaySound(PlayerSfx.Idle, true);
+                    currentSfx = PlayerSfx.Idle;
+                }
+            }
+
             moveTank();
         }
 
@@ -113,12 +139,12 @@ namespace TankGame.Tank
             if (Input.GetButtonDown("Fire1"))
             {
                 controller.fire(bulletSpawner, bulletDamage);
+
             }
         }
 
         private void moveTank()
         {
-            controller.PlaySound(PlayerSfx.Walk, false);
             currentEulerAngles += new Vector3(0, horizontalInput, 0) * Time.deltaTime * rotatingSpeed;
             transform.eulerAngles = currentEulerAngles;
             //currentTankSpeed += new Vector3(0, 0, verticalInput) * Time.deltaTime * movingSpeed;

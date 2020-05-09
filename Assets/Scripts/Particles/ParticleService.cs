@@ -10,7 +10,7 @@ public class ParticleService : MonoSingletonGeneric<ParticleService>
     {
         Instantiate(particleEffect[0], spawnPosition, spawnRotation);
         particleEffect[0].Play();
-
+        Debug.Log("explode");
     }
     public void CreateTankExplosion(Vector3 spawnPosition, Quaternion spawnRotation)
     {

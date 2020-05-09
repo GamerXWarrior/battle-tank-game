@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TankGame.Enemy;
@@ -6,7 +7,6 @@ using TankGame.Tank;
 
 namespace TankGame.Bullet
 {
-
     public class BulletView : MonoBehaviour
     {
         private int bulletSpeed;
@@ -18,14 +18,18 @@ namespace TankGame.Bullet
         private BulletController controller;
         private BulletModel model;
         private BulletType bulletType;
-               
+        
+        private float initDamage;
 
         private void Start()
         {
+            //rb = GetComponent<Rigidbody>();
+           
             //setSpeed();
         }
 
-        public void SetBulletDetails( float healthDamage)
+
+        public void SetBulletDetails(float healthDamage)
         {
             model = controller.BulletModel;
             bulletSpeed = model.Speed;
@@ -36,7 +40,7 @@ namespace TankGame.Bullet
 
         public void InitializeController(BulletController bulletController)
         {
-             controller = bulletController;
+            controller = bulletController;
         }
 
         public BulletController GetController()
@@ -55,21 +59,40 @@ namespace TankGame.Bullet
             Destroy(gameObject, 0.1f);
         }
 
+        public void Enable(Transform spawner, float damageValue)
+        {
+
+            ParticleService.Instance.CreateBulletExplosion(spawner.position, spawner.rotation);
+
+            transform.localPosition = spawner.position;
+            transform.localRotation = spawner.rotation; //Quaternion.LookRotation(spawner.forward);
+            rb.WakeUp();
+            rb.velocity = spawner.forward * model.Speed;
+
+            gameObject.SetActive(true);
+        }
+        public void Disable()
+        {
+            ParticleService.Instance.CreateBulletExplosion(this.transform.position, this.transform.rotation);
+            gameObject.SetActive(false);
+            rb.Sleep();
+            //ResetBullet();
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
-            //CheckCollision collisionCheck = new CheckCollision(collision, damage);
 
             //Instantiate(bombExplosion, transform.position, transform.rotation);
-            Collider[] colliders = Physics.OverlapSphere(collision.transform.position, 2f);
+            Collider[] colliders = Physics.OverlapSphere(collision.transform.position, 0.1f);
             controller.DestroyBulletView();
             foreach (Collider hit in colliders)
             {
 
                 IDamagable damagable = hit.gameObject.GetComponent<IDamagable>();
-                if(damagable != null){
+                if (damagable != null)
+                {
                     damagable.TakeDamage(damage);
                 }
-
 
                 //if (hit.GetComponent<EnemyView>())
                 //{
@@ -79,11 +102,9 @@ namespace TankGame.Bullet
                 //        controller.ApplyEnemyDamage(damage, enemy);
                 //    }
                 //}
-                
-            }
 
+            }
         }
 
-       
     }
 }

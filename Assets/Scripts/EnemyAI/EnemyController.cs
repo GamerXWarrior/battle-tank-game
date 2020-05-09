@@ -7,10 +7,12 @@ namespace TankGame.Enemy
 {
     public class EnemyController
     {
-        public EnemyController(EnemyModel enemyModel, EnemyView enemyView, Vector3 spawnerPos, Quaternion spawnerRotation, EnemyScriptableObject enemyScriptableObject)
+        public EnemyController(EnemyModel enemyModel, EnemyView enemyView, Vector3 spawnerPos, Quaternion spawnerRotation,int enemyNumber)
         {
             EnemyModel = enemyModel;
             SpawnerPos = spawnerPos;
+            SpawnerRotation = spawnerRotation;
+            EnemyNumber = enemyNumber;
             EnemyView = GameObject.Instantiate<EnemyView>(enemyView, SpawnerPos, spawnerRotation);
             EnemyView.InitializeController(this);
             EnemyView.SetViewDetails();
@@ -38,6 +40,7 @@ namespace TankGame.Enemy
         {
             EnemyService.Instance.DestroyTank(this);
         }
+
         public void Destroy()
         {
             if (EnemyView != null && EnemyModel != null)
@@ -45,10 +48,20 @@ namespace TankGame.Enemy
                 EnemyView.Destroy();
                 EnemyModel = null;
             }
+        }   
+        public void Disable()
+        {
+                EnemyView.Disable();
+        }
+        public void Enable()
+        {       
+                EnemyView.Enable();
         }
 
         public EnemyView EnemyView { get; }
         public EnemyModel EnemyModel { get; set; }
         public Vector3 SpawnerPos { get; }
+        public Quaternion SpawnerRotation { get; }
+        public int EnemyNumber { get; }
     }
 }
